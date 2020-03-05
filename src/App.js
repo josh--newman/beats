@@ -5,6 +5,50 @@ const timeSigStyle = {
   fontSize: "60px"
 };
 
+const STAVE_X_OFFSET = 100;
+
+const NOTES = {
+  KICK: "K",
+  SNARE: "S",
+  HIGH_HAT: "H",
+  HIGH_TOM: "T1",
+  MID_TOM: "T2",
+  FLOOR_TOM: "T3",
+  RIDE: "R"
+};
+
+const NOTE_Y_COORDS = {
+  [NOTES.KICK]: 70,
+  [NOTES.SNARE]: 30,
+  [NOTES.HIGH_HAT]: -10,
+  [NOTES.HIGH_TOM]: 10,
+  [NOTES.MID_TOM]: 20,
+  [NOTES.FLOOR_TOM]: 50,
+  [NOTES.RIDE]: 0
+};
+
+const beatState = {
+  timeSignature: "4/4",
+  bars: [
+    [NOTES.KICK, NOTES.HIGH_HAT],
+    [],
+    [NOTES.HIGH_HAT],
+    [],
+    [NOTES.SNARE, NOTES.HIGH_HAT],
+    [],
+    [NOTES.HIGH_HAT],
+    [],
+    [NOTES.KICK, NOTES.HIGH_HAT],
+    [],
+    [NOTES.HIGH_HAT],
+    [],
+    [NOTES.SNARE, NOTES.HIGH_HAT],
+    [],
+    [NOTES.HIGH_HAT],
+    []
+  ]
+};
+
 function App() {
   return (
     <div className="App">
@@ -17,16 +61,9 @@ function App() {
         }}
       >
         <div>
-          <svg id="beat" width="900px">
+          <svg id="beat" width="900px" style={{ overflow: "visible" }}>
             {/* <!-- start bar --> */}
-            <line
-              x1="0"
-              y1="0"
-              x2="0"
-              y2="80"
-              stroke="#000"
-              stroke-width="10"
-            />
+            <line x1="0" y1="0" x2="0" y2="80" stroke="#000" strokeWidth="10" />
 
             {/* <!-- time signature --> */}
             <text style={timeSigStyle} x="20" y="40">
@@ -36,13 +73,45 @@ function App() {
               4
             </text>
 
-            {/* <!-- bar lines -->
-          <!-- time sig takes up 60 width --> */}
+            {/* <!-- stave lines -->
+            <!-- time sig takes up 60 width --> */}
             <line x1="0" y1="0" x2="900" y2="0" stroke="#000" />
             <line x1="0" y1="20" x2="900" y2="20" stroke="#000" />
             <line x1="0" y1="40" x2="900" y2="40" stroke="#000" />
             <line x1="0" y1="60" x2="900" y2="60" stroke="#000" />
             <line x1="0" y1="80" x2="900" y2="80" stroke="#000" />
+
+            {/* note markers */}
+            <line x1="100" y1="0" x2="100" y2="300" stroke="#777" />
+            <line x1="150" y1="0" x2="150" y2="300" stroke="#777" />
+            <line x1="200" y1="0" x2="200" y2="300" stroke="#777" />
+            <line x1="250" y1="0" x2="250" y2="300" stroke="#777" />
+            <line x1="300" y1="0" x2="300" y2="300" stroke="#777" />
+            <line x1="350" y1="0" x2="350" y2="300" stroke="#777" />
+            <line x1="400" y1="0" x2="400" y2="300" stroke="#777" />
+            <line x1="450" y1="0" x2="450" y2="300" stroke="#777" />
+            <line x1="500" y1="0" x2="500" y2="300" stroke="#777" />
+            <line x1="550" y1="0" x2="550" y2="300" stroke="#777" />
+            <line x1="600" y1="0" x2="600" y2="300" stroke="#777" />
+            <line x1="650" y1="0" x2="650" y2="300" stroke="#777" />
+            <line x1="700" y1="0" x2="700" y2="300" stroke="#777" />
+            <line x1="750" y1="0" x2="750" y2="300" stroke="#777" />
+            <line x1="800" y1="0" x2="800" y2="300" stroke="#777" />
+            <line x1="850" y1="0" x2="850" y2="300" stroke="#777" />
+
+            {/* beats */}
+            {beatState.bars.map((bar, i) => {
+              return bar.map(beat => {
+                return (
+                  <circle
+                    key={`${beat}_${i}`}
+                    cx={STAVE_X_OFFSET + i * 50}
+                    cy={NOTE_Y_COORDS[beat]}
+                    r="10"
+                  />
+                );
+              });
+            })}
 
             {/* <!-- end bar --> */}
             <line
@@ -51,7 +120,7 @@ function App() {
               x2="900"
               y2="80"
               stroke="#000"
-              stroke-width="10"
+              strokeWidth="10"
             />
           </svg>
         </div>
