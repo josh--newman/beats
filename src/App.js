@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
+import Tone from "tone";
 
 const timeSigStyle = {
   fontSize: "60px"
@@ -49,9 +50,44 @@ const beatState = {
   ]
 };
 
+const drums = new Tone.Players({
+  [NOTES.KICK]: "./sounds/kick.mp3",
+  [NOTES.SNARE]: "./sounds/snare.mp3",
+  [NOTES.HIGH_HAT]: "./sounds/high-hat.mp3",
+  [NOTES.HIGH_TOM]: "./sounds/small-tom.mp3",
+  [NOTES.MID_TOM]: "./sounds/mid-tom.mp3",
+  [NOTES.FLOOR_TOM]: "./sounds/floor-tom.mp3",
+  [NOTES.RIDE]: "./sounds/ride.mp3"
+}).toMaster();
+
+const seq = new Tone.Sequence(
+  (time, count) => {
+    const notes = beatState.bars[count];
+    notes.forEach(note => {
+      // console.log(drums.loaded);
+      drums.get(note).start(time, 0);
+    });
+  },
+  [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+  "16n"
+);
+
 function App() {
+  const [isPlaying, setIsPlaying] = useState(false);
+
   return (
     <div className="App">
+      <button
+        onClick={async () => {
+          await Tone.start();
+          // console.log("Tone started");
+          Tone.Transport.toggle();
+          seq.start(0);
+          setIsPlaying(isPlaying ? false : true);
+        }}
+      >
+        {isPlaying ? "Stop" : "Play"}
+      </button>
       <div
         style={{
           marginTop: "100px",
