@@ -64,6 +64,7 @@ function App() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [sequence, setSequence] = useState(null);
   const [currentBar, setCurrentBar] = useState(null);
+  const [bpm, setBpm] = useState(Tone.Transport.bpm.value);
 
   useEffect(() => {
     const seq = new Tone.Sequence(
@@ -91,6 +92,20 @@ function App() {
       >
         {isPlaying ? "Stop" : "Play"}
       </button>
+      <div>
+        <input
+          type="range"
+          min="20"
+          max="240"
+          value={bpm}
+          onChange={e => {
+            console.log(e.target);
+            setBpm(e.target.value);
+            Tone.Transport.bpm.value = e.target.value;
+          }}
+        />
+        {bpm}
+      </div>
       <div
         style={{
           marginTop: "100px",
