@@ -60,29 +60,32 @@ const drums = new Tone.Players({
   [NOTES.RIDE]: "./sounds/ride.mp3"
 }).toMaster();
 
-const seq = new Tone.Sequence(
-  (time, count) => {
-    const notes = beatState.bars[count];
-    notes.forEach(note => {
-      // console.log(drums.loaded);
-      drums.get(note).start(time, 0);
-    });
-  },
-  [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
-  "16n"
-);
-
 function App() {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [sequence, setSequence] = useState(null);
+  const [currentBar, setCurrentBar] = useState(null);
+
+  useEffect(() => {
+    const seq = new Tone.Sequence(
+      (time, count) => {
+        const notes = beatState.bars[count];
+        notes.forEach(note => {
+          drums.get(note).start(time, 0);
+        });
+        setCurrentBar(count);
+      },
+      [...Array(16).keys()],
+      "16n"
+    );
+    setSequence(seq);
+  }, []);
 
   return (
     <div className="App">
       <button
         onClick={async () => {
-          await Tone.start();
-          // console.log("Tone started");
           Tone.Transport.toggle();
-          seq.start(0);
+          isPlaying ? sequence.stop() : sequence.start(0);
           setIsPlaying(isPlaying ? false : true);
         }}
       >
@@ -140,6 +143,7 @@ function App() {
               return bar.map(beat => {
                 return (
                   <circle
+                    fill={currentBar === i ? "blue" : "inherit"}
                     key={`${beat}_${i}`}
                     cx={STAVE_X_OFFSET + i * 50}
                     cy={NOTE_Y_COORDS[beat]}
