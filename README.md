@@ -8,6 +8,7 @@ A library of playable drum beats
 - [x] Render a beat with notes
 - [ ] Make notes look pretty
 - [x] Make beat playable using Tone.js
+- [x] Adjustable BPM playback
 - [ ] Build list of beats
 - [ ] Make beats editable
 - [ ] Persistent storage of beats

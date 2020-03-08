@@ -99,7 +99,6 @@ function App() {
           max="240"
           value={bpm}
           onChange={e => {
-            console.log(e.target);
             setBpm(e.target.value);
             Tone.Transport.bpm.value = e.target.value;
           }}
